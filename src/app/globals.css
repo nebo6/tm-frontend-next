@@ -5,22 +5,54 @@
   --foreground: #171717;
 }
 
-@theme inline {
+/* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
+} */
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.login-gradient-bg {
+  background: linear-gradient(292.9deg, #f5ffff 0%, #c2d1ff 100%);
+}
+
+@layer components {
+  /*
+  Our base class for icons inherits the current text color and applies common styles.
+  We're using a specific component class to prevent potential style conflicts and utilize the [data-axis] attribute.
+  */
+  .icon {
+    @apply select-none fill-current inline-block text-inherit box-content;
+  }
+
+  /* Set icon size to 1em based on its aspect ratio, so we can use `font-size` to scale it */
+  .icon[data-axis*="x"] {
+    /* scale horizontally */
+    @apply w-[1em];
+  }
+
+  .icon[data-axis*="y"] {
+    /* scale vertically */
+    @apply h-[1em];
+  }
+
+  .input-group {
+    @apply flex w-full text-base bg-white rounded-md text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600 sm:text-sm/6;
+  }
+  .input {
+    @apply block flex-1 bg-transparent px-3 py-1.5 outline-0 placeholder:text-gray-400;
+  }
 }
