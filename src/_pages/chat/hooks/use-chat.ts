@@ -29,7 +29,15 @@ export const useChat = (userId: string) => {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    const socket = io("http://localhost:3000");
+    const socket = io("http://localhost:3000", {
+      auth: {
+        token: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+      extraHeaders: {
+        // Альтернативный вариант
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
+    });
     setSocket(socket);
     return () => {
       socket.disconnect();
@@ -48,6 +56,13 @@ export const useChat = (userId: string) => {
     });
     socket.on(listenTo.leaveRoom, (data: EventData) => {
       console.log(`user ${data.userId} left room ${data.roomId}`);
+    });
+
+    socket.on("connect_error", (err) => {
+      if (err.message === "Unauthorized") {
+        alert("Unauthorized");
+        // Перенаправляем на логин
+      }
     });
 
     return () => {
